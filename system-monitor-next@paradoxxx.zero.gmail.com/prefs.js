@@ -388,6 +388,14 @@ const SMExpanderRow = GObject.registerClass({
         this._settings.bind(`${widgetType}-refresh-time`, this._refresh_time,
             'value', Gio.SettingsBindFlags.DEFAULT
         );
+        this._graph_width.connect('notify::value', widget => {
+            this._settings.set_int(`${widgetType}-graph-width`,
+                Math.round(widget.value));
+        });
+        this._refresh_time.connect('notify::value', widget => {
+            this._settings.set_int(`${widgetType}-refresh-time`,
+                Math.round(widget.value));
+        });
 
         switch (widgetType) {
             case 'cpu': {
