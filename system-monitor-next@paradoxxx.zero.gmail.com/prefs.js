@@ -385,9 +385,25 @@ const SMExpanderRow = GObject.registerClass({
         this._settings.bind(`${widgetType}-graph-width`, this._graph_width,
             'value', Gio.SettingsBindFlags.DEFAULT
         );
+        this._graph_width.connect('changed', (editable) => {
+            const text = editable.get_text();
+            const value = parseInt(text, 10);
+            const adjustment = editable.get_adjustment();
+            if (!isNaN(value) && value >= adjustment.get_lower() && value <= adjustment.get_upper()) {
+                this._settings.set_int(`${widgetType}-graph-width`, value);
+            }
+        });
         this._settings.bind(`${widgetType}-refresh-time`, this._refresh_time,
             'value', Gio.SettingsBindFlags.DEFAULT
         );
+        this._refresh_time.connect('changed', (editable) => {
+            const text = editable.get_text();
+            const value = parseInt(text, 10);
+            const adjustment = editable.get_adjustment();
+            if (!isNaN(value) && value >= adjustment.get_lower() && value <= adjustment.get_upper()) {
+                this._settings.set_int(`${widgetType}-refresh-time`, value);
+            }
+        });
 
         switch (widgetType) {
             case 'cpu': {
